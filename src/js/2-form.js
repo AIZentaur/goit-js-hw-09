@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'feedback-form-state';
 
-const formState = {
+const formData = {
   email: '',
   message: '',
 };
@@ -11,10 +11,10 @@ const savedData = localStorage.getItem(STORAGE_KEY);
 if (savedData) {
   try {
     const parsedData = JSON.parse(savedData);
-    formState.email = parsedData.email ?? '';
-    formState.message = parsedData.message ?? '';
-    form.elements.email.value = formState.email;
-    form.elements.message.value = formState.message;
+    formData.email = parsedData.email ?? '';
+    formData.message = parsedData.message ?? '';
+    form.elements.email.value = formData.email;
+    form.elements.message.value = formData.message;
   } catch (error) {
     console.error('Error parsing saved form data:', error);
   }
@@ -22,23 +22,23 @@ if (savedData) {
 
 form.addEventListener('input', event => {
   const { name, value } = event.target;
-  if (name in formState) {
-    formState[name] = value.trim();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(formState));
+  if (name in formData) {
+    formData[name] = value.trim();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
   }
 });
 
 form.addEventListener('submit', event => {
   event.preventDefault();
 
-  if (formState.email === '' || formState.message === '') {
+  if (formData.email === '' || formData.message === '') {
     alert('Fill please all fields');
     return;
   }
 
-  console.log({ ...formState });
+  console.log({ ...formData });
   localStorage.removeItem(STORAGE_KEY);
-  formState.email = '';
-  formState.message = '';
+  formData.email = '';
+  formData.message = '';
   form.reset();
 });
